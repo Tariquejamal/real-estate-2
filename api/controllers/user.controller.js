@@ -11,7 +11,7 @@ export const test = (req,res) =>{
 
 
 export const updateUser = async  (req,res, next) =>  {
-    if(req.user.id !==  req.params.id) return next(errorHandler(401, "you can only update your own account"))
+    if (!req.user || req.user.id !== req.params.id) return next(errorHandler(401, "you can only update your own account"));
 
 
     try {
