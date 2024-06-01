@@ -62,18 +62,15 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`,
-      {
-
-        method : 'POST',
-        headers : {
-          'Content-Type' : 'application/json',
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        body : JSON.stringify(formData),
+        body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false){
-
+      if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
       }
@@ -82,9 +79,9 @@ export default function Profile() {
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
-      setError(error.message);
     }
-  }
+  };
+
 
   const handleDeleteUser = async () => {
     try {
@@ -135,6 +132,26 @@ export default function Profile() {
       setUserListings(data);
     } catch (error) {
       setShowListingsError(true);
+    }
+  };
+
+
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -202,7 +219,7 @@ export default function Profile() {
               </Link>
 
               <div className='flex flex-col item-center'>
-                <button
+              <button
                   onClick={() => handleListingDelete(listing._id)}
                   className='text-red-700 uppercase'
                 >
