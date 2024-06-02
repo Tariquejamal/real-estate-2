@@ -60,7 +60,7 @@ export default function Listing() {
 
         {listing && !loading && !error && (
         <div className='flex flex-col items-center'>
-            <div className="h-25 w-50">
+            <div className="h-25 w-50 mt-3">
 
 <img className="h-25 w-full object-cover" src={listing.imageUrls} alt="" />
 </div>
