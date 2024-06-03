@@ -1,20 +1,28 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import { useParams,  } from 'react-router-dom'
-
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
-import { Navigation } from 'swiper/modules'
-import 'swiper/css/bundle';
-import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css/bundle';
+import {
+  FaBath,
+  FaBed,
+  FaChair,
+  FaMapMarkedAlt,
+  FaMapMarkerAlt,
+  FaParking,
+  FaShare,
+} from 'react-icons/fa';
 import Contact from '../components/Contact';
 
 export default function Listing() {
     SwiperCore.use([Navigation]);
+
     const [listing,setListing] = useState(null)
     const [loading,setLoading] = useState(false);
     const[error,setError] = useState(false);
-    // cosnt[copied,setCopied] = useState(false);
+    const [copied,setCopied] = useState(false);
     const [contact,setContact] = useState(false);
     const params = useParams();
     const {currentUser} = useSelector((state) => state.user);
@@ -59,12 +67,20 @@ export default function Listing() {
         { error && <p className='text-center my-7  text-2xl'>Something went wrong</p>}
 
         {listing && !loading && !error && (
-        <div className='flex flex-col items-center'>
-            <div className="h-25 w-50 mt-3">
-
-<img className="h-25 w-full object-cover" src={listing.imageUrls} alt="" />
-</div>
-
+        <div>
+          <Swiper navigation>
+            {listing.imageUrls.map((url) => (
+              <SwiperSlide key={url}>
+                <div
+                  className='h-[550px]'
+                  style={{ 
+                    background: `url(${url}) center no-repeat`,
+                    backgroundSize: 'cover',
+                  }}
+                ></div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
           <div className='fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer'>
             <FaShare
               className='text-slate-500'
@@ -77,11 +93,11 @@ export default function Listing() {
               }}
             />
           </div>
-          {/* {copied && (
+          {copied && (
             <p className='fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2'>
               Link copied!
             </p>
-          )} */}
+          )}
           <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
             <p className='text-2xl font-semibold'>
               {listing.name} - ${' '}
